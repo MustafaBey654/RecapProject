@@ -1,13 +1,10 @@
-﻿using Entities.Abstracts;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
+
+using Entities.Abstracts;
 
 namespace Entities.Concrete
 {
-    public class Car:IEntity
+    public class Car : IEntity
     {
         public int Id { get; set; }
         public int BrandId { get; set; }

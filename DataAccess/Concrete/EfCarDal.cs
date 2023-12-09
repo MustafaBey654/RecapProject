@@ -1,6 +1,7 @@
-﻿using DataAccess.Abstracts;
-using DataAccess.Concrete.InMemories;
+﻿
+using Core.DataAccess.Eframework;
 using Entities.Concrete;
+using Entities.DTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,61 +10,26 @@ using System.Threading.Tasks;
 
 namespace DataAccess.Concrete
 {
-    public class EfCarDal : ICarDal
+    public class EfCarDal:BaseRepository<Car,EfDbContext>
     {
-        private InMemoryContext _context;
-
-        public EfCarDal(InMemoryContext context)
+        public List<CarDetailDTO> GetCarDetails()
         {
-            _context = context;
-        }
-
-        public void Add(Car car)
-        {
-           _context.Cars.Add(car);
-        }
-
-        public void Delete(Car car)
-        {
-           var myCar = _context.Cars.SingleOrDefault(c=>c.Id == car.Id);
-            if(myCar is not null)
+            using(var context = new EfDbContext())
             {
-                _context.Cars.Remove(myCar);
-            }
-            else
-            {
-                throw new Exception("not found");
+                var result = from c in context.Cars
+                             join r in context.Colors
+                             on c.ColorId equals r.Id
+                             select new CarDetailDTO
+                             {
+                                 CarID = c.Id,
+                                 Color = r.Name,
+                                 Description = c.Description,
+                                 ModelYear = c.ModelYear,
+                                 Price = c.DailyPrice
+                             };
+
+                return result.ToList();
             }
         }
-
-        public List<Car> GetAll()
-        {
-            return _context.Cars;
-        }
-
-        public Car GetById(int id)
-        {
-            var car = _context.Cars.Find(c => c.Id == id);
-            if(car is not null)
-            {
-                return car;
-            }
-            else
-            {
-                 throw new Exception("not found car");
-            }
-        }
-
-        public void Update(Car car)
-        {
-            var mycar = _context.Cars.FirstOrDefault(c => c.Id == car.Id);
-            mycar.DailyPrice = car.DailyPrice;
-            mycar.ModelYear = car.ModelYear;
-            mycar.BrandId = car.BrandId;
-            mycar.ColorId = car.ColorId;
-            mycar.Description = car.Description;
-            
-
-        }  
     }
 }

@@ -1,11 +1,12 @@
-﻿using Business.Abstracts;
+﻿
+
+using Business.Abstracts;
+using Business.Constants;
+using Core.Utilities;
 using DataAccess.Concrete;
 using Entities.Concrete;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Entities.DTO;
+using System.Linq.Expressions;
 
 namespace Business.Concrete
 {
@@ -13,34 +14,102 @@ namespace Business.Concrete
     {
         private readonly EfCarDal _efCarDal;
 
-        public CarManager(EfCarDal efCarDal)
+        public CarManager()
         {
-            _efCarDal = efCarDal;
+            _efCarDal = new EfCarDal();
         }
 
-        public void Add(Car car)
+        public IResult Add(Car entity)
         {
-            _efCarDal.Add(car);
+            if(entity != null && entity.Description.Length>2 && entity.DailyPrice>0)
+            {
+                _efCarDal.Add(entity);
+                return new SuccessResult(Messages.AddCar);
+            }
+            else
+            {
+                return new ErrorResult(Messages.CarNameInvalid);
+            }
         }
 
-        public void Delete(Car car)
+        public IResult Delete(int carId)
         {
-            _efCarDal.Delete(car);
+            var car = _efCarDal.Get(c=>c.Id== carId);
+            if(car != null)
+            {
+                _efCarDal.Delete(car);
+                return new SuccessResult();
+            }
+            else
+            {
+                return new ErrorResult();
+            }
         }
 
-        public List<Car> GetAll()
+        public IDataResult<List<Car>> GetAll()
         {
-           return _efCarDal.GetAll();
+            return new SuccessDataResult<List<Car>>( _efCarDal.GetAll(),Messages.CarListed);
         }
 
-        public Car GetById(int id)
+     
+
+        public IDataResult<Car> GetById(int id)
         {
-            return _efCarDal.GetById(id);
+            var car = _efCarDal.Get(c=>c.Id==id);
+            if(car != null)
+            {
+                return new SuccessDataResult<Car>( car);
+            }
+            else
+            {
+                return new ErrorDataResult<Car>();
+            }
         }
 
-        public void Update(Car car)
+        public IDataResult<Car> GetCarById(int carId)
         {
-            _efCarDal.Update(car);
+            var car = _efCarDal.Get(c => c.Id == carId);
+            if(car is null)
+            {
+                return new ErrorDataResult<Car>();
+            }
+            else
+            {
+                return new SuccessDataResult<Car>();
+            }
         }
+
+        public IDataResult<List<CarDetailDTO>> GetCarDetails()
+        {
+            return new SuccessDataResult<List<CarDetailDTO>>(_efCarDal.GetCarDetails());
+        }
+
+        public IDataResult<List<Car>> GetCarsByBrandId(int brandId)
+        {
+            return new SuccessDataResult<List<Car>>(_efCarDal.GetAll(b => b.BrandId == brandId));
+        }
+
+        public IDataResult<List<Car>> GetCarsByColorId(int colorId)
+        {
+            return new SuccessDataResult<List<Car>>(_efCarDal.GetAll(c=>c.ColorId==colorId));
+        }
+
+        public IResult Update(Car entity)
+        {
+          if(entity == null)
+            {
+                return new ErrorResult();
+            }
+            else
+            {
+                _efCarDal.Update(entity);
+                return new SuccessResult();
+            }
+        }
+
+       
+      
+
+      
     }
 }

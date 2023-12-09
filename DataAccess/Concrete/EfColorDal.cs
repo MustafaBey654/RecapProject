@@ -1,16 +1,14 @@
 ﻿using Core.DataAccess.Eframework;
 using Entities.Concrete;
-using Entities.DTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DataAccess.Abstracts
+namespace DataAccess.Concrete
 {
-    public interface ICarDal:IEntityRepository<Car>
+    public class EfColorDal:BaseRepository<Color,EfDbContext>
     {
-        List<CarDetailDTO> GetCarDetails();
     }
 }
