@@ -19,10 +19,13 @@ namespace DataAccess.Concrete
                 var result = from c in context.Cars
                              join r in context.Colors
                              on c.ColorId equals r.Id
+                             join b in context.Brands
+                             on c.BrandId equals b.Id
                              select new CarDetailDTO
                              {
                                  CarID = c.Id,
-                                 Color = r.Name,
+                                 ColorName = r.Name,
+                                 BrandName = b.Name,
                                  Description = c.Description,
                                  ModelYear = c.ModelYear,
                                  Price = c.DailyPrice
