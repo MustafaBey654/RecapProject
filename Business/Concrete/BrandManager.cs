@@ -2,6 +2,7 @@
 
 
 using Business.Abstracts;
+using Core.Utilities;
 using DataAccess.Concrete;
 using Entities.Concrete;
 using System.Linq.Expressions;
@@ -11,36 +12,69 @@ namespace Business.Concrete
     public class BrandManager : IBrandService
     {
         private readonly EfBrandDal _efBrandDal;
-        public void Add(Brand entity)
+
+        public BrandManager()
         {
-            _efBrandDal.Add(entity);
+            _efBrandDal = new EfBrandDal();
         }
 
-        public void Delete(Brand entity)
+        public IResult Add(Brand brand)
         {
-            _efBrandDal.Delete(entity);
+            if (brand is not null && brand.Name.Length>2)
+            {
+                _efBrandDal.Add(brand);
+                return new SuccessResult();
+            }
+            else
+            {
+                return new ErrorResult();
+            }
         }
 
-        public Brand Get(Expression<Func<Brand, bool>> filter)
+        public IResult Delete(int brandId)
         {
-            return _efBrandDal.Get(filter);
+            var brand = _efBrandDal.Get(b=>b.Id == brandId);
+            if(brand is not null)
+            {
+                _efBrandDal.Delete(brand);
+                return new SuccessResult();
+            }
+            else
+            {
+                return new ErrorResult();
+            }
         }
 
-        public List<Brand> GetAll(Expression<Func<Brand, bool>> filter = null)
+        public IDataResult<List<Brand>> GetAll()
         {
-            return _efBrandDal.GetAll();
+            return new SuccessDataResult<List<Brand>>(_efBrandDal.GetAll());
         }
 
-       
-
-        public Brand GetById(Expression<Func<Brand, bool>> filter)
+        public IDataResult<Brand> GetColorById(int brandId)
         {
-            return _efBrandDal.Get(filter);
+            var brand = _efBrandDal.Get(b=>b.Id==brandId);
+            if (brand is not null)
+            {
+                return new SuccessDataResult<Brand>(brand);
+            }
+            else
+            {
+                return new ErrorDataResult<Brand>();
+            }
         }
 
-        public void Update(Brand entity)
+        public IResult Update(Brand brand)
         {
-            _efBrandDal.Update(entity);
+            var myBrand = _efBrandDal.Get(b => b.Id == brand.Id);
+            if (myBrand is not null)
+            {
+                _efBrandDal.Update(brand); 
+                return new SuccessResult();
+            }
+            else
+            {
+                return new ErrorResult();
+            }
         }
     }
 }

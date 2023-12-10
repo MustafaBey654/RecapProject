@@ -1,53 +1,73 @@
 ﻿using Business.Abstracts;
-using DataAccess.Abstracts;
+using Core.Utilities;
 using DataAccess.Concrete;
 using Entities.Concrete;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace Business.Concrete
 {
     public class ColorManager : IColorService
     {
         private readonly EfColorDal _efColorDal;
+
         public ColorManager()
         {
-            _efColorDal=new EfColorDal();
+            _efColorDal = new EfColorDal();
         }
-        public void Add(Color entity)
-        {
-            _efColorDal.Add(entity);
-        }
+    
 
-        public void Delete(Color entity)
+        public IResult Add(Color color)
         {
-           _efColorDal.Delete(entity);
-        }
-
-        public Color Get(Expression<Func<Color, bool>> filter)
-        {
-            return _efColorDal.Get(filter);
-        }
-
-        public List<Color> GetAll(Expression<Func<Color,bool>> filter=null)
-        {
-            return _efColorDal.GetAll();
+           if(color is not null && color.Name.Length>2)
+            {
+                _efColorDal.Add(color);
+                return new SuccessResult();
+            }
+            else
+            {
+                return new ErrorResult();
+            }
+           
         }
 
-        public Color GetById(int id)
+        public IResult Delete(int colorId)
         {
-          return  _efColorDal.Get(c=>c.Id == id);
+           var car = _efColorDal.Get(c=>c.Id == colorId);
+            if(car is not null)
+            {
+                _efColorDal.Delete(car);
+                return new SuccessResult();
+            }
+            else
+            {
+                return new ErrorResult();
+            }
         }
 
-       
-
-        public void Update(Color entity)
+        public IDataResult<List<Color>> GetAll()
         {
-            _efColorDal.Update(entity);
+            _efColorDal.GetAll();
+            return new SuccessDataResult<List<Color>>();
+        }
+
+        public IDataResult<Color> GetColorById(int carId)
+        {
+            var car = _efColorDal.Get(c=>c.Id==carId);
+            if(car is not null)
+            {
+                return new SuccessDataResult<Color>(car);
+            }
+            else
+            {
+                return new ErrorDataResult<Color>();
+            }
+        }
+
+        public IResult Update(Color color)
+        {
+            _efColorDal.Update(color);
+            return new SuccessResult();
+
         }
     }
 }
