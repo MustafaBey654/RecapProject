@@ -9,8 +9,7 @@ namespace Core.Utilities
 {
     public class SuccessDataResult<T> : DataResult<T>
     {
-        private List<Car> cars;
-        private string carListed;
+      
 
         public SuccessDataResult(T data, bool success, string message) : base(data, true, message)
         {
