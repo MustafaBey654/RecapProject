@@ -12,7 +12,7 @@ namespace Core.Utilities
         {
         }
 
-        public SuccessResult(string message):base(default,message)
+        public SuccessResult(string message):base(true,message)
         {
             
         }
@@ -21,5 +21,8 @@ namespace Core.Utilities
         {
             
         }
+
+
+       
     }
 }

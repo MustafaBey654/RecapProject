@@ -13,5 +13,7 @@ namespace Business.Abstracts
         IDataResult<List<Rental>> GetAll();
         IResult AddRental(Rental rental);
         IResult RemoveRental(Rental rental);
+        IDataResult<Rental> GetRentalById(int id);
+        IResult UpdateRental(Rental rental);
     }
 }

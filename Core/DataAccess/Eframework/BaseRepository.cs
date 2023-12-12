@@ -53,7 +53,7 @@ namespace Core.DataAccess.Eframework
         {
             using (var context = new EFContext())
             {
-                return context.Set<T>().SingleOrDefault(filter);
+                return context.Set<T>().Where(filter).FirstOrDefault();
             }
         }
 

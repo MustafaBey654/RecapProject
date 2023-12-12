@@ -1,5 +1,6 @@
 ﻿
 using Core.DataAccess.Eframework;
+using DataAccess.Abstracts;
 using Entities.Concrete;
 using Entities.DTO;
 using System;
@@ -10,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace DataAccess.Concrete
 {
-    public class EfCarDal:BaseRepository<Car,EfDbContext>
+    public class EfCarDal:BaseRepository<Car,EfDbContext>,ICarDal
     {
         public List<CarDetailDTO> GetCarDetails()
         {

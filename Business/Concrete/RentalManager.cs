@@ -38,12 +38,40 @@ namespace Business.Concrete
             return new SuccessDataResult<List<Rental>>(_efRentalDal.GetAll());
         }
 
+        public IDataResult<Rental> GetRentalById(int id)
+        {
+            var rental = _efRentalDal.Get(r=>r.Id==id);
+            if(rental == null)
+            {
+                return new ErrorDataResult<Rental>();
+            }
+            else
+            {
+                return new SuccessDataResult<Rental>(rental);
+            }
+
+        }
+
         //Eğer araba kiralama tarihi mevcut tarihten önce ise bu kiralamayı sil
         public IResult RemoveRental(Rental rental)
         {
             if(rental.ReturnDate >= DateTime.Now)
             {
                 _efRentalDal.Delete(rental);
+                return new SuccessResult();
+            }
+            else
+            {
+                return new ErrorResult();
+            }
+        }
+
+        public IResult UpdateRental(Rental rental)
+        {
+            var myRental = _efRentalDal.Get(r=>r.Id == rental.Id);
+            if(myRental is not null)
+            {
+                _efRentalDal.Update(rental);
                 return new SuccessResult();
             }
             else

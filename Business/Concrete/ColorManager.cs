@@ -46,8 +46,8 @@ namespace Business.Concrete
 
         public IDataResult<List<Color>> GetAll()
         {
-            _efColorDal.GetAll();
-            return new SuccessDataResult<List<Color>>();
+            
+            return new SuccessDataResult<List<Color>>(_efColorDal.GetAll());
         }
 
         public IDataResult<Color> GetColorById(int carId)

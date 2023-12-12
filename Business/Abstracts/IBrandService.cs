@@ -12,7 +12,7 @@ namespace Business.Abstracts
     public interface IBrandService
     {
         IDataResult<List<Brand>> GetAll();
-        IDataResult<Brand> GetColorById(int carId);
+        IDataResult<Brand> GetBrandById(int brandId);
         IResult Add(Brand brand);
         IResult Update(Brand brand);
         IResult Delete(int brandId);

@@ -50,7 +50,7 @@ namespace Business.Concrete
             return new SuccessDataResult<List<Brand>>(_efBrandDal.GetAll());
         }
 
-        public IDataResult<Brand> GetColorById(int brandId)
+        public IDataResult<Brand> GetBrandById(int brandId)
         {
             var brand = _efBrandDal.Get(b=>b.Id==brandId);
             if (brand is not null)
