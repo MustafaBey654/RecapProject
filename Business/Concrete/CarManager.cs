@@ -2,11 +2,14 @@
 
 using Business.Abstracts;
 using Business.Constants;
-using Core.Utilities;
+using Business.ValidationRules.FluentValidation;
+using Core.Aspects.Autofac.Validation;
+
+using Core.Utilities.Results;
 using DataAccess.Concrete;
 using Entities.Concrete;
 using Entities.DTO;
-using System.Linq.Expressions;
+
 
 namespace Business.Concrete
 {
@@ -19,17 +22,14 @@ namespace Business.Concrete
             _efCarDal = new EfCarDal();
         }
 
+        [ValidationAspect(typeof(CarValidator))]
         public IResult Add(Car entity)
         {
-            if(entity != null && entity.Description.Length>2 && entity.DailyPrice>0)
-            {
+           
                 _efCarDal.Add(entity);
                 return new SuccessResult(Messages.AddCar);
-            }
-            else
-            {
-                return new ErrorResult(Messages.CarNameInvalid);
-            }
+            
+           
         }
 
         public IResult Delete(int carId)

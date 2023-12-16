@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Core.Utilities
+namespace Core.Utilities.Results
 {
     public class DataResult<T> : Result, IDataResult<T>
     {
@@ -17,7 +17,7 @@ namespace Core.Utilities
             Data = data;
         }
 
-        public DataResult(T data,string message):base(default,message)
+        public DataResult(T data, string message) : base(default, message)
         {
             Data = data;
         }

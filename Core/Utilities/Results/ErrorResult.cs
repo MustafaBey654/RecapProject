@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Core.Utilities
+namespace Core.Utilities.Results
 {
     public class ErrorResult : Result
     {
@@ -12,9 +12,9 @@ namespace Core.Utilities
         {
         }
 
-        public ErrorResult(string message):base(default,message)
+        public ErrorResult(string message) : base(default, message)
         {
-            
+
         }
 
         public ErrorResult() : base(false)

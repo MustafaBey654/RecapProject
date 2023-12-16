@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Core.Utilities
+namespace Core.Utilities.Results
 {
-    public interface IDataResult<T> :IResult
+    public interface IDataResult<T> : IResult
     {
-       T Data { get; }
+        T Data { get; }
     }
 }

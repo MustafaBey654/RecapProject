@@ -1,10 +1,19 @@
+using Autofac;
+using Autofac.Extensions.DependencyInjection;
 using Business.Abstracts;
 using Business.Concrete;
+using Business.DependencyResolvers.Autofac;
 using DataAccess.Abstracts;
 using DataAccess.Concrete;
 using WebAPI.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory())
+    .ConfigureContainer<ContainerBuilder>(builder =>
+    {
+        builder.RegisterModule(new AutofacBusinessModule());
+    });
 
 // Add services to the container.
 
@@ -13,7 +22,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.ConfigureService();
+
 
 var app = builder.Build();
 
