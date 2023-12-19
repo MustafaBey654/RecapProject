@@ -6,6 +6,7 @@ using Autofac.Extras.DynamicProxy;
 using Business.Abstracts;
 using Business.Concrete;
 using Castle.DynamicProxy;
+using Core.DataAccess.InMemoryForImages;
 using Core.Utilities.Interceptors;
 using DataAccess.Abstracts;
 using DataAccess.Concrete;
@@ -42,7 +43,9 @@ namespace Business.DependencyResolvers.Autofac
             builder.RegisterType<UserManager>().As<IUserService>().SingleInstance();
             builder.RegisterType<EfUserDal>().As<IUserDal>().SingleInstance();
 
-           
+            builder.RegisterType<CarImageManager>().As<ICarImageService>().SingleInstance();
+            builder.RegisterType<EfCarImageDal>().As<ICarImageDal>().SingleInstance();
+           // builder.RegisterType<ImageSaver>().As<ImageSaver>().SingleInstance();
         
 
 
