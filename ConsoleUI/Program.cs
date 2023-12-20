@@ -23,28 +23,28 @@ Console.WriteLine("*/*/*/*/Araba Kiralama ve Müşteri Ekleme */* /*/*/ */ ");
 
 //};
 
-UserManager userManager = new UserManager();
+//UserManager userManager = new UserManager();
 //foreach (var user in userList)
 //{
 //    userManager.Add(user);
 //}
 
-var userListesi = userManager.GetAllUser().Data;
-foreach (var user in userListesi)
-{
-    Console.WriteLine(user.FirstName + " " + user.LastName);
-}
+//var userListesi = userManager.GetAllUser().Data;
+//foreach (var user in userListesi)
+//{
+//    Console.WriteLine(user.FirstName + " " + user.LastName);
+//}
 
-CustomerManager customerManager = new CustomerManager();
+//CustomerManager customerManager = new CustomerManager();
 
-var customerList = new List<Customer>
-{
-    new Customer{CompanyName="Kiralama",UserId=1},
-    new Customer{CompanyName="Kiralama",UserId=2},
-    new Customer{CompanyName="Kiralama",UserId=3},
-    new Customer{CompanyName="Kiralama",UserId=4},
-    new Customer{CompanyName="Kiralama",UserId=5}
-};
+//var customerList = new List<Customer>
+//{
+//    new Customer{CompanyName="Kiralama",UserId=1},
+//    new Customer{CompanyName="Kiralama",UserId=2},
+//    new Customer{CompanyName="Kiralama",UserId=3},
+//    new Customer{CompanyName="Kiralama",UserId=4},
+//    new Customer{CompanyName="Kiralama",UserId=5}
+//};
 
 //foreach (var customer in customerList)
 //{
@@ -52,11 +52,11 @@ var customerList = new List<Customer>
 //}
 
 
-var customerListe = customerManager.GetAllCustomer().Data;
-foreach (var customer in customerListe)
-{
-    Console.WriteLine(customer.CompanyName +" "+ customer.UserId);
-}
+//var customerListe = customerManager.GetAllCustomer().Data;
+//foreach (var customer in customerListe)
+//{
+//    Console.WriteLine(customer.CompanyName +" "+ customer.UserId);
+//}
 
 
 RentalManager rentalManager = new RentalManager();

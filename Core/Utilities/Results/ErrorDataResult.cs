@@ -17,6 +17,11 @@ namespace Core.Utilities.Results
 
         }
 
+        public ErrorDataResult(string message):base(default,message)
+        {
+            
+        }
+
         public ErrorDataResult() : base(default, false)
         {
 

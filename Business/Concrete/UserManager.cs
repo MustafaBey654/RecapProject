@@ -1,9 +1,6 @@
 ﻿using Business.Abstracts;
-using Core.Utilities;
-using Core.Utilities.Results;
+using Core.Entities.Concrete;
 using DataAccess.Abstracts;
-using DataAccess.Concrete;
-using Entities.Concrete;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,66 +11,26 @@ namespace Business.Concrete
 {
     public class UserManager : IUserService
     {
-        EfUserDal _efUserDal;
-        public UserManager()
+        IUserDal _userDal;
+
+        public UserManager(IUserDal userDal)
         {
-            _efUserDal = new EfUserDal();
-        }
-        public IResult Add(User user)
-        {
-            _efUserDal.Add(user);
-            return new SuccessResult();
+            _userDal = userDal;
         }
 
-        public IResult Delete(User user)
+        public List<OperationClaim> GetClaims(User user)
         {
-            var myUser = _efUserDal.Get(u=>u.Id ==  user.Id);
-            if(myUser != null)
-            {
-                _efUserDal.Delete(myUser);
-                return new SuccessResult();
-            }
-            else
-            {
-                return new ErrorResult();
-            }
+            return _userDal.GetClaims(user);
         }
 
-        public IDataResult<List<User>> GetAllUser()
+        public void Add(User user)
         {
-            return new SuccessDataResult<List<User>>(_efUserDal.GetAll());
+            _userDal.Add(user);
         }
 
-        public IDataResult<User> GetUserById(int id)
+        public User GetByMail(string email)
         {
-            var user = _efUserDal.Get(u=>u.Id ==  id);
-            if(user != null)
-            {
-                return new SuccessDataResult<User>(user);
-            }
-            else
-            {
-                return new ErrorDataResult<User>();
-            }
-        }
-
-        public IResult Update(User user)
-        {
-            var myUSer = _efUserDal.Get(u=>u.Id==user.Id);
-            if(myUSer != null)
-            {
-                myUSer.FirstName = user.FirstName;
-                myUSer.LastName = user.LastName;
-                myUSer.Email = user.Email;
-                myUSer.Password = user.Password;
-
-                _efUserDal.Update(myUSer);
-                return new SuccessResult();
-            }
-            else
-            {
-                return new ErrorResult();
-            }
+            return _userDal.Get(u => u.Email == email);
         }
     }
 }
