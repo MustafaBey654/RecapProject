@@ -4,6 +4,9 @@ using Business.Abstracts;
 using Business.BusinessAspects.Autofac;
 using Business.Constants;
 using Business.ValidationRules.FluentValidation;
+using Core.Aspects.Autofac.Caching;
+using Core.Aspects.Autofac.Performance;
+using Core.Aspects.Autofac.Transaction;
 using Core.Aspects.Autofac.Validation;
 
 using Core.Utilities.Results;
@@ -23,8 +26,10 @@ namespace Business.Concrete
             _efCarDal = new EfCarDal();
         }
 
+        [CacheRemoveAspect("ICarService.GetAll")] // ürün ekleme yapıldıktan sonra get ile ilgili tüm cache leri sil.
         [SecuredOperation("car.add,admin")]
         [ValidationAspect(typeof(CarValidator))]
+        [TransactionScopeAspect] // burada yapılan bir hata veri tabanına eklenmeden dönecek.
         public IResult Add(Car entity)
         {
            
@@ -48,6 +53,9 @@ namespace Business.Concrete
             }
         }
 
+        [CacheAspect]
+        [SecuredOperation("car.list")]
+        [PerformanceAspect(10)] // 10 saniyeden fazla sürerse log düşecek.
         public IDataResult<List<Car>> GetAll()
         {
             return new SuccessDataResult<List<Car>>( _efCarDal.GetAll(),Messages.CarListed);

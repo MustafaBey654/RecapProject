@@ -60,6 +60,4 @@ public class JwtHelper : ITokenHelper
 
         return claims;
     }
-
-   
 }

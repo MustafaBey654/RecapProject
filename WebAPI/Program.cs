@@ -1,14 +1,11 @@
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
-using Business.Abstracts;
-using Business.Concrete;
+
 using Business.DependencyResolvers.Autofac;
+using Core.DependencyResolvers;
+using Core.Extensions;
 using Core.Utilities.IOC;
-using DataAccess.Abstracts;
-using DataAccess.Concrete;
-using WebAPI.Extensions;
-using Business.DependencyResolvers.Autofac;
-using Core.Utilities.IOC;
+
 using Core.Utilities.Security.Encryption;
 using Core.Utilities.Security.JWT;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -25,9 +22,13 @@ builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory())
 // Add services to the container.
 
 builder.Services.AddControllers();
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowOrigin",
+        builder => builder.WithOrigins("https://localhost:7240", "http://localhost:5167"));
+});
 
 
-builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 var tokenOptions = builder.Configuration.GetSection("TokenOptions").Get<TokenOptions>();
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -44,7 +45,11 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             IssuerSigningKey = SecurityKeyHelper.CreateSecurityKey(tokenOptions.SecurityKey)
         };
     });
-ServiceTool.Create(builder.Services);
+builder.Services.AddDependencyResolvers(new ICoreModule[]
+{
+    new CoreModule()
+});
+
 
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -62,9 +67,15 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+
+app.UseCors(builder => builder.WithOrigins("https://localhost:7240", "http://localhost:5167").AllowAnyHeader());
 app.UseHttpsRedirection();
 
+
+app.UseAuthentication();
+
 app.UseAuthorization();
+
 
 app.MapControllers();
 
